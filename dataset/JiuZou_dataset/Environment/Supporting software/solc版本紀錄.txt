@@ -1,0 +1,4 @@
+continue in do while => 0.4.26
+(dowhileContinueIn_solc_050.sol => 0.5.0)
+
+Remove dynamic array element => 0.6.2

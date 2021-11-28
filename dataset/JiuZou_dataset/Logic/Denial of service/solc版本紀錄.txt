@@ -1,0 +1,4 @@
+
+All => 0.6.2
+(cost loop/bugs contract/gray_varIsNotSafe.sol => 0.4.26
+ cost loop/misleading contract/gray_varIsNotSafe.sol => 0.4.26)

@@ -1,0 +1,5 @@
+
+Change the contract status in the view or constant function =>  0.4.26
+
+Improper use of require, assert, and revert => 0.6.2
+ 

@@ -1,0 +1,10 @@
+
+All => 0.6.2
+
+(Implicit visibility level/bug contract/ImplicitVisibility.sol => 0.4.26
+ Unlimited compiler versions/bug contract/UncappedVersion.sol => 0.4.21
+ Unlimited compiler versions/bug contract/UncappedVersion1.sol => 0.4.21
+ Unlimited compiler versions/contract without the bug/NoUncappedVersion.sol => 0.4.21
+ Unlimited compiler versions/contract without the bug/NoUncappedVersion1.sol => 0.5.0
+ Use deprecated built-in symbols/bug contract/deprecated.sol => 0.4.26)
+ 

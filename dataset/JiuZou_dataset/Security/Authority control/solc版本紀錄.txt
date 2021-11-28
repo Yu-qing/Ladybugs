@@ -1,0 +1,5 @@
+
+Else => 0.6.2
+
+(Write the wrong constructor name/bugs contract/MissConsreuctor.sol => 0.4.26
+ Write the wrong constructor name/contract without the bug/NoMissConsreuctor1.sol => 0.4.26)
