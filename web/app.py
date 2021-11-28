@@ -1,11 +1,8 @@
-from collections import defaultdict
-from flask import Flask,render_template,request,redirect, templating,url_for,jsonify,json
-import os,sys
-from flask.helpers import make_response
+from flask import Flask,render_template,request,json
+import os
 import jinja2.exceptions
 from werkzeug.utils import secure_filename
 import json
-import re
 
 UPLOAD_FOLDER = './files/'
 ALLOWED_EXTENSIONS = set(['sol'])
