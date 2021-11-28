@@ -1,0 +1,8 @@
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# store smart contract files
+web/crytic-export/
+web/files/
