@@ -56,7 +56,10 @@ The array length is calculated for each loop, but the array length remains the s
                     id = tmp_id.pop()
                     nodes = tmp_n.pop()
                     flag = False
+                    
                 id = id+1
+                if id  == len(nodes):
+                    break
 
             if nodes[id].type == NodeType.IFLOOP:
                 var.clear()
