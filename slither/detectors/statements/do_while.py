@@ -44,9 +44,10 @@ function deleteOwner(address _own) external onlyOwner{
 
 
     def _detect(self):
-        """"""
-        results = []
+        if str(self.compilation_unit.solc_version) >= "0.5.0":
+            return []
 
+        results = []
         for c in self.contracts:
             for f in c.functions_declared:
                 values = self.detect_continue(f)
