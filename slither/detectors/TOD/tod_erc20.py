@@ -92,11 +92,9 @@ function transferFrom(address from, address to, uint256 value) public returns (b
 
             if f.name == "transferFrom":
                 res.append(f)
-                print(f.name)
 
             if f.name == "approve":
                 res.append(f)
-                print(f.name)
                 
                 for n in  f.nodes:
                     if (

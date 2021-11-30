@@ -85,21 +85,28 @@ function UpdateBonusCodeAt(uint idx, uint c) external {
                 
                 elif isinstance(ir, Binary):
                     (L, R) = ir.read
+                    left_value = L.name
+                    right_value = R.name
 
                     #step1 : check length, store safe condition (no underflow's condition)
+                    #L.name maybe a boolean, check it first 
                     if ir.type in [BinaryType.GREATER_EQUAL, BinaryType.LESS_EQUAL]:
-                        if isinstance(L, Constant) and int(L.name) > 0 and R in length:
-                            check.append(length[R])
+                        if left_value[0] >='0' and left_value[0] <='9':
+                            if isinstance(L, Constant) and int(left_value) > 0 and R in length:
+                                check.append(length[R])
 
-                        elif isinstance(R, Constant) and int(R.name) > 0 and L in length:
-                            check.append(length[L])
+                        elif right_value[0] >='0' and right_value[0] <='9':
+                            if isinstance(R, Constant) and int(right_value) > 0 and L in length:
+                                check.append(length[L])
                     #step1 :
                     if ir.type in [BinaryType.GREATER, BinaryType.LESS, BinaryType.EQUAL, BinaryType.NOT_EQUAL]:
-                        if isinstance(L, Constant) and int(L.name) >= 0 and R in length:
-                            check.append(length[R])
+                        if left_value[0] >='0' and left_value[0] <='9':
+                            if isinstance(L, Constant) and int(left_value) >= 0 and R in length:
+                                check.append(length[R])
 
-                        elif isinstance(R, Constant) and int(R.name) >= 0 and L in length:
-                            check.append(length[L])
+                        elif right_value[0] >='0' and right_value[0] <='9':
+                            if isinstance(R, Constant) and int(right_value) >= 0 and L in length:
+                                check.append(length[L])
                     
                     #step3 : when length can be underflow, the require-statement is always true, record it.
                     if ir.type in [BinaryType.GREATER, BinaryType.LESS]:

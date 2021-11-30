@@ -50,7 +50,6 @@ The call fails when the address with which it interacts does not exist, and fail
                     SolidityVariableComposed("msg.sender") in ir.read
                 ):
                     for v in address_array:
-                        print(address_array)
                         if is_dependent(ir.lvalue, v, f.contract):
                             exsist_address.append(v)
                 
