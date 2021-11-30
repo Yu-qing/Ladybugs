@@ -1,4 +1,4 @@
-12/*
+/*
  * @source: etherscan.io 
  * @author: -
  * @vulnerable_at_lines: 25

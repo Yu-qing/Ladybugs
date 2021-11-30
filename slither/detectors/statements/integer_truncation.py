@@ -1,4 +1,5 @@
 from collections import defaultdict
+from slither.core.solidity_types.array_type import ArrayType
 from slither.slithir.variables import ReferenceVariable, TemporaryVariable
 from slither.slithir.operations import Binary, BinaryType, TypeConversion, Index
 from slither.core.solidity_types.elementary_type import ElementaryType, Int, Uint
@@ -17,77 +18,70 @@ def detect_conversions(nodes):
     
     for node in nodes:
         for ir in node.irs:
-            # a[i]
-            if isinstance(ir, Index):
-                if not isinstance(ir.lvalue.type, ElementaryType):
-                    continue
-
-                (var, index) = ir.read
-                if isinstance(index, (ReferenceVariable, TemporaryVariable)) and (index in tmps):
-                    index = tmps[index]
-                    if len(index) == 1:
-                        index = index[0]
-                tmps[ir.lvalue] = (var, index)
-
             # uint(a) == a, a[i] == uint(a[i]), ...
-            elif is_equal_or_not_equal(ir):
+            if is_equal_or_not_equal(ir):
                 (left, right) = ir.read
-                type = None
+                type = []
+                type_flag = False
 
                 if isinstance(left, TemporaryVariable) and (left in tmps):
                     (v, t) = tmps[left]
-                    if not isinstance(t, ElementaryType):
-                        left = tmps[left]
-                    else:
-                        left = v
-                        type = t
+                    left = v
+                    type.append(t)
+                    type_flag = True
+                else:
+                    type.append(None)
 
                 if isinstance(right, TemporaryVariable) and(right in tmps):
                     (v, t) = tmps[right]
-                    if not isinstance(t, ElementaryType):
-                        right = tmps[right]
-                    else:
-                        right = v
-                        type = t
+                    right = v
+                    type.append(t)
+                    type_flag = True
+                else:
+                    type.append(None)
                 
-                if isinstance(left, ReferenceVariable) and (left in tmps):
-                    left = tmps[left]
-                if isinstance(right, ReferenceVariable) and (right in tmps):
-                    right = tmps[right]
+                if isinstance(left, ReferenceVariable):
+                    left = left.points_to_origin
                 
-                if (left == right) and (type != None):
+                if isinstance(right, ReferenceVariable):
+                    right = right.points_to_origin
+
+                if (left == right) and type_flag:
                     if (left, type) not in condition_nodes:
-                        condition_nodes += [(left, type)]  
+                        condition_nodes += [(left, type)]
 
 
             elif isinstance(ir, TypeConversion) and isinstance(ir.type, ElementaryType):
                 if node.contains_if() or node.contains_require_or_assert():
-                    var = ir.variable
-                    if isinstance(var, (ReferenceVariable, TemporaryVariable)) and (var in tmps):
-                        var = tmps[var]
-                        if len(var) == 1:
-                            var = var[0]
-                    tmps[ir.lvalue] = (var, ir.type)
+                    tmps[ir.lvalue] = (ir.variable, ir.type)
 
                 else:
                     var = ir.variable
                     convert_type = ir.type
-                    if isinstance(var, ReferenceVariable) and (var in tmps):
-                        var = tmps[var]
+
+                    if isinstance(var, ReferenceVariable):
+                        var = var.points_to_origin
 
                     if (var, convert_type) in condition_nodes:
                         continue
                     
                     else:
                         if (convert_type.name in Uint) or (convert_type.name in Int):
-                            if var.type.name in Uint:
-                                if var.type.max > convert_type.max:
+                            var_type = var.type
+                            if not isinstance(var_type, (ElementaryType, ArrayType)):
+                                continue
+
+                            if isinstance(var_type, ArrayType):
+                                var_type = var_type.type
+
+                            if var_type.name in Uint:
+                                if var_type.max > convert_type.max:
                                     f_results += [node]
 
-                            elif var.type.name in Int:
-                                if var.type.max > convert_type.max:
+                            elif var_type.name in Int:
+                                if var_type.max > convert_type.max:
                                     f_results += [node]
-                                elif var.type.min < convert_type.min:
+                                elif var_type.min < convert_type.min:
                                     f_results += [node]
 
     return f_results    

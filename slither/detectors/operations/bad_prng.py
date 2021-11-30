@@ -52,23 +52,24 @@ def collect_Constructor_values(functions):
             nodes += f.nodes
         if f.name == "slitherConstructorConstantVariables":
             nodes += f.nodes
-        
-    nodes.sort(key=lambda x: x.source_mapping['lines'])
+    
+    if nodes:
+        nodes.sort(key=lambda x: x.source_mapping["start"])
 
-    for n in nodes:
-        if len(n.irs) == 0:
-            continue
-        if not n.irs[-1].lvalue:
-            continue
+        for n in nodes:
+            if len(n.irs) == 0:
+                continue
+            if not n.irs[-1].lvalue:
+                continue
 
-        lvalue = n.irs[-1].lvalue
-        if lvalue.visibility in ["public", "external"]:
-            continue
-        all_constructor_values[lvalue] = []
-        for var in n.variables_read:
-            if (var in block_variables) or (var in only_block_constructor_values):
-                only_block_constructor_values[lvalue] = False
-                break
+            lvalue = n.irs[-1].lvalue
+            if lvalue.visibility in ["public", "external"]:
+                continue
+            all_constructor_values[lvalue] = []
+            for var in n.variables_read:
+                if (var in block_variables) or (var in only_block_constructor_values):
+                    only_block_constructor_values[lvalue] = False
+                    break
 
     return (all_constructor_values, only_block_constructor_values)
 

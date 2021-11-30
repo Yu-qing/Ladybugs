@@ -20,7 +20,10 @@ class Handle_TmpandRefer():
             if len(var) == 1:
                 var = var[0]
 
-        if (not isinstance(index, Constant) and 
+        if isinstance(index, Constant):
+            index = str(index)
+
+        elif (not isinstance(index, Constant) and 
             isinstance(index, (ReferenceVariable, TemporaryVariable)) and 
             index in self._temp
         ):

@@ -70,8 +70,8 @@ function UpdateBonusCodeAt(uint idx, uint c) external {
 
                     if isinstance(v, (ReferenceVariable, TemporaryVariable)) and (v in index):
                         v = index[v]
-                        if len(var) == 1:
-                            var = var[0]
+                        if len(v) == 1:
+                            v = v[0]
 
                     if (not isinstance(i, Constant) and 
                         isinstance(i, (ReferenceVariable, TemporaryVariable)) and 
@@ -119,6 +119,8 @@ function UpdateBonusCodeAt(uint idx, uint c) external {
 
                     #step2 : if length-- and not in check list, store it
                     if ir.type == BinaryType.SUBTRACTION:
+                        if isinstance(L, Constant):
+                            continue
                         if L in length and length[L] not in check:
                             underflow.append(length[L])
 

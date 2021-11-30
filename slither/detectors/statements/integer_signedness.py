@@ -1,6 +1,8 @@
 import locale
 from slither.core.declarations.solidity_variables import SolidityVariable, SolidityVariableComposed
-from slither.slithir.variables import Constant
+from slither.core.solidity_types.array_type import ArrayType
+from slither.slithir import variables
+from slither.slithir.variables import Constant, ReferenceVariable
 from slither.slithir.operations import Binary, BinaryType, TypeConversion
 from slither.core.solidity_types.elementary_type import ElementaryType, Int, Uint
 from slither.detectors.abstract_detector import AbstractDetector, DetectorClassification
@@ -50,9 +52,20 @@ def detect_conversions(nodes):
                 
                 if not isinstance(ir.type, ElementaryType):
                     continue
+                
+                v = ir.variable
+                if isinstance(v, ReferenceVariable):
+                    v = v.points_to_origin
 
-                if ir.type.name in Uint and ir.variable.type.name in Int:
-                    if ir.variable not in var:
+                v_type = v.type
+                if not isinstance(v_type, (ElementaryType, ArrayType)):
+                    continue
+
+                if isinstance(v_type, ArrayType):
+                    v_type = v_type.type
+
+                if ir.type.name in Uint and v_type.name in Int:
+                    if v not in var:
                         res.append(node)
                         continue
 

@@ -3,6 +3,7 @@ from slither.core.declarations.solidity_variables import SolidityFunction
 from slither.core.solidity_types.array_type import ArrayType
 from slither.detectors.abstract_detector import AbstractDetector, DetectorClassification
 from slither.slithir.operations import SolidityCall
+from slither.slithir.variables import Constant
 
 
 class HashCollision(AbstractDetector):
@@ -65,6 +66,7 @@ function addUsers(
                     
                     elif (ir.function in hash_functions and
                         len(ir.arguments) == 1 and 
+                        not isinstance(ir.arguments[0], Constant) and
                         ir.arguments[0] in bugs
                     ):
                         res.append(bugs[ir.arguments[0]])

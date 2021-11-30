@@ -39,7 +39,6 @@ def delete_changed_value(left, results, arguments, tmps, unuse_nodes):
         left = tmps[left]
         if len(left) == 1:
             left = left[0]
-           
     if left in results:
         if results[left][0] not in unuse_nodes:
             unuse_nodes += [ results[left][0] ]
@@ -169,7 +168,7 @@ def detect_overflow(nodes):
 
                 if (left in results) and (right in arguments):
                     if results[left][0] in arguments[right]:
-                        tmtemp_varsps[ir.lvalue] = (left, right)
+                        temp_vars[ir.lvalue] = (left, right)
 
             #tmp == b  or  tmp != b
             #b == tmp  or  b != tmp

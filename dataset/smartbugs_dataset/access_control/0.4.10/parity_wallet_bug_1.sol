@@ -1,27 +1,5 @@
-/*
- * @source: https://github.com/paritytech/parity-ethereum/blob/4d08e7b0aec46443bf26547b17d10cb302672835/js/src/contracts/snippets/enhanced-wallet.sol#L216
- * @author: parity
- * @vulnerable_at_lines: 223,437
- */
-
-//sol Wallet
-// Multi-sig, daily-limited account proxy/wallet.
-// @authors:
-// Gav Wood <g@ethdev.com>
-// inheritable "property" contract that enables methods to be protected by requiring the acquiescence of either a
-// single, or, crucially, each of a number of, designated owners.
-// usage:
-// use modifiers onlyowner (just own owned) or onlymanyowners(hash), whereby the same hash must be provided by
-// some number (specified in constructor) of the set of owners (specified in the constructor, modifiable) before the
-// interior is executed.
-
 pragma solidity ^0.4.9;
-
 contract WalletEvents {
-  // EVENTS
-
-  // this contract only has six types of events: it can accept a confirmation, in which case
-  // we record owner and operation (hash) alongside it.
   event Confirmation(address owner, bytes32 operation);
   event Revoke(address owner, bytes32 operation);
 

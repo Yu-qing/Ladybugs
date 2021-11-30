@@ -1,6 +1,6 @@
 from collections import defaultdict
 from slither.core.cfg.node import NodeType
-from slither.slithir.variables import Constant
+from slither.slithir.variables import Constant, ReferenceVariable
 from slither.detectors.abstract_detector import AbstractDetector, DetectorClassification
 from slither.slithir.operations import Length, Binary, Assignment
 from slither.slithir.operations.binary import BinaryType
@@ -109,7 +109,13 @@ The array length is calculated for each loop, but the array length remains the s
             id = id +1
             if id  == len(nodes):
                 break
-        
+
+        for i in invariant:
+            if isinstance(i, ReferenceVariable):
+                invariant.remove(i)
+                i = i.points_to_origin
+                invariant.append(i)
+
         return invariant
 
     def _detect(self):

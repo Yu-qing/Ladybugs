@@ -1,3 +1,4 @@
+from slither.core.variables.variable import Variable
 from slither.detectors.abstract_detector import AbstractDetector, DetectorClassification
 
 
@@ -34,8 +35,10 @@ function getConstuint() pure returns(uint256){
     def _detect(self):
         """"""
         value = []
-        res = []
+        res = [] 
         results = []
+        #for solc version less than 0.5.0
+        filename_B = self.compilation_unit.source_units[0]
 
         for c in self.contracts:
             function = [f for f in c.functions_declared
@@ -45,12 +48,25 @@ function getConstuint() pure returns(uint256){
 
             for t in test:
                 source_map = t.source_mapping
-                path = source_map['filename_absolute']
-                line = source_map['lines'][0]
-                with open(path, 'r') as file:
-                    code = file.readlines()[line-1].rstrip()
-                if all(vis not in code for vis in ["public", "external", "private", "internal"]):
-                    value.append(t)
+
+                if "filename_absolute" in source_map:
+                    path = source_map['filename_absolute']
+                    line = source_map['lines'][0]
+                    with open(path, 'r') as file:
+                        code = file.readlines()[line-1].rstrip()
+                    if all(vis not in code for vis in ["public", "external", "private", "internal"]):
+                        value.append(t)
+                
+                else:
+                    path = filename_B
+                    start = source_map['start']
+                    with open(path, 'r') as file:
+                        file.seek(start)
+                        code = file.readline()
+                    if all(vis not in code for vis in ["public", "external", "private", "internal"]):
+                        value.append(t)
+
+                
 
         if value:
             for r in value:
