@@ -4,7 +4,7 @@ import time
 
 start = time.time()
 
-path = 'smartbugs_wild.csv'
+path = 'smartbugs_wild_2000.csv'
 with open(path, newline='') as csvfile:
     rows = csv.reader(csvfile, delimiter=',')
     
