@@ -102,43 +102,51 @@ def detect_file():
 				return render_template('no_bugs.html')
 
 			data={}
-			title=[]
+			sec_level = {}
+			title = []
+			level = []
 			total_num=0
-			optimization_num=0
-			informational_num=0
+			else_num=0
 			low_num=0
 			medium_num=0
 			high_num=0
 			for i in range(len(jf['results']['detectors'])):
 				str1 = "{0}".format(jf['results']['detectors'][i]['check'])
 				str2 = "{0}".format(jf['results']['detectors'][i]['description'])
-
 				str2 = str2.split('\n')
-
-				total_num+=1
-				impact=jf['results']['detectors'][i]['impact']
-				if impact=="Optimization":
-					optimization_num+=1
-				elif impact=="Informational":
-					informational_num+=1
-				elif impact=="Low":
-					low_num+=1
-				elif impact=="Medium":
-					medium_num+=1
-				else:
-					high_num+=1
-
-
-				if len(title) > 0 and str1 == title[-1]:
-					data[str1] += [str2]
-					continue
 				
+				impact=jf['results']['detectors'][i]['impact']
+
+				if impact in ["Informational", "Optimization"]:
+					impact = "Optimization"
+
+				if len(level)>0 and impact in level:
+					if str1 not in sec_level[impact]:
+						sec_level[impact] += [str1]
+				else:
+					level.append(impact)
+					sec_level[impact] = [str1]
+
+				if len(title) > 0 and str1 in title:
+					data[str1] += [str2]
 				else:
 					title.append(str1)
 					data[str1] = [str2]
+					print(str1)
 
-		return render_template('result.html',data=data,title=title,total_num=total_num,optimization_num=optimization_num,
-					informational_num=informational_num,low_num=low_num,medium_num=medium_num,high_num=high_num)
+					if impact=="Optimization":
+						else_num+=1
+					elif impact=="Low":
+						low_num+=1
+					elif impact=="Medium":
+						medium_num+=1
+					else:
+						high_num+=1
+					
+					total_num+=1
+
+		return render_template('result.html', sec_level = sec_level,data=data,total_num=total_num,else_num=else_num,
+					low_num=low_num,medium_num=medium_num,high_num=high_num,level = level)
 			
 @app.route('/detect_file', methods=['GET','POST'])
 def detect_file_dropdown_list():

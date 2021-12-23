@@ -12,18 +12,45 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Result of number</h4>
+                    <h4 class="modal-title">Result of detection</h4>
                     <button type="button" class="close" data-dismiss="modal">×</button>
                 </div>
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    <h5>Total: {{total_num}}</h5>
-                    <h5>Optimization: {{optimization_num}}</h5>
-                    <h5>Informational: {{informational_num}}</h5>
-                    <h5>Low: {{low_num}}</h5>
-                    <h5>Medium: {{medium_num}}</h5>
-                    <h5>High: {{high_num}}</h5>
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Impact</th>
+                                <th>Number</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>High</td>
+                                <td>{{high_num}}</td>
+                            </tr>
+                            
+                            <tr>
+                                <td>Medium</td>
+                                <td>{{medium_num}}</td>
+                            </tr>
+                            
+                            <tr>
+                                <td>Low</td>
+                                <td>{{low_num}}</td>
+                            </tr>
+                            <tr>
+                                <td>Optimization</td>
+                                <td>{{else_num}}</td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                    <div class="text-center">
+                        <h3>Total : {{total_num}}</h3>
+                    </div>
+                    
                 </div>
 
                 <!-- Modal footer -->
@@ -49,39 +76,62 @@
 
                     <div class="p-5">
                         <div class="text-center text-gray-900 "><h1><b>Result</b></h1></div>
-                        {% for title in title %}
-                        {% set h = "#{0}".format(title) %}
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Accordion -->
-                            <a href="{{h}}" class="d-block card-header py-3" data-toggle="collapse" role="button"
-                                aria-expanded="true" aria-controls="collapseCardExample">
-                                <h6 class="m-0 font-weight-bold text-primary">{{title}}</h6>
-                            </a>
-                            <!-- Card Content - Collapse -->
-                            <div class="collapse show" id="{{title}}">
-                                <div id="reseult" class="card-body ">
-                                    <table class="table table-bordered text-gray-900">
-                                        <thbody>
-                                            {% for data in data[title] %}
-                                            <tr>
-                                                <td align='center'>{{loop.index}}</td>
-                                                <td>
-                                                    {% for data_slice in data %}
-                                                    {% if '\t' in data_slice %}
-                                                    &emsp;
-                                                    {% endif %}
-                                                    {{data_slice}}
-                                                    </br>
-                                                    {% endfor %}
-                                                </td>
-                                            </tr>
+                        {% for level in sec_level %}
+                        {% set h = "#{0}".format(level) %}
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Accordion -->
+                                <a href="{{h}}" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                                    aria-expanded="true" aria-controls="collapseCardExample">
+                                    <h6 class="m-0 font-weight-bold text-primary">{{level}}</h6>
+                                </a>
+                                <!-- Card Content - Collapse -->
+                                <div class="collapse show" id="{{level}}">
+                                    <div id="reseult" class="card-body ">
+                                            {% for title in sec_level[level] %}
+                                            {% set g = "#{0}".format(title) %}
+                                            <div class="card shadow mb-4">
+                                                <!-- Card Header - Accordion -->
+                                                <a href="{{g}}" class="d-block card-header py-3" data-toggle="collapse" role="button"
+                                                    aria-expanded="true" aria-controls="collapseCardExample">
+                                                    <h6 class="m-0 font-weight-bold text-primary">{{title}}</h6>
+                                                </a>
+                                                <!-- Card Content - Collapse -->
+                                                <div class="collapse show" id="{{title}}">
+                                                    <div id="reseult" class="card-body ">
+                                                        <table class="table table-bordered text-gray-900">
+                                                            <thbody>
+                                                                {% for level in level %}
+                                                                {% for sec_level in sec_level[level] %}
+                                                                <p>{{sec_level}}</p>
+
+                                                                {% endfor %}
+                                                                {% endfor %}
+                                                                {% for data in data[title] %}
+                                                                <tr>
+                                                                    <td align='center'>{{loop.index}}</td>
+                                                                    <td>
+                                                                        {% for data_slice in data %}
+                                                                        {% if '\t' in data_slice %}
+                                                                        &emsp;
+                                                                        {% endif %}
+                                                                        {{data_slice}}
+                                                                        </br>
+                                                                        {% endfor %}
+                                                                    </td>
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </thbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             {% endfor %}
-                                        </thbody>
-                                    </table>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         {% endfor %}
+                        
                         <hr>
                     </div>
                 </div>
