@@ -1,4 +1,5 @@
 # pylint: disable=unused-import,relative-beyond-top-level
+import imp
 from .arithmetic.uint_overflow_add import UintOverflowADD
 from .arithmetic.uint_overflow_mul import UintOverfloMUL
 from .arithmetic.uint_underflow_sub import UintUnderflow
@@ -84,6 +85,7 @@ from .variables.uninitialized_local_variables import UninitializedLocalVars
 from .variables.uninitialized_state_variables import UninitializedStateVarsDetection
 from .variables.uninitialized_storage_variables import UninitializedStorageVars
 from .variables.unused_state_variables import UnusedStateVars
+from .variables.public_data import PublicData
 from .TOD.tod_amount import TODAmount
 from .TOD.tod_erc20 import TODERC20
 from .TOD.tod_receiver import TODReciver
