@@ -69,7 +69,7 @@ def detect(f, state_var):
                 tleft  = temp_type[left]
                 tright = temp_type[right]
 
-                if isinstance(left, (ReferenceVariable, TemporaryVariable)):
+                if isinstance(left, (ReferenceVariable, TemporaryVariable)) and left in temp_vars:
                     if tleft == 2: 
                         left = (temp_vars[left][0][0], temp_vars[left][1])
                         while isinstance(left[0], tuple):
@@ -81,7 +81,7 @@ def detect(f, state_var):
                         while isinstance(left, tuple):
                             left = left[0]
 
-                if isinstance(right, (ReferenceVariable, TemporaryVariable)):
+                if isinstance(right, (ReferenceVariable, TemporaryVariable)) and right in temp_vars:
                     if tright == 2:
                         right = (temp_vars[right][0][0],temp_vars[right][1])
                         while isinstance(right[0], tuple):
