@@ -177,7 +177,7 @@ class PublicData(AbstractDetector):
                 if f.visibility not in ["public", "external"]:
                     continue
 
-                nodes += detect(f, state_var)
+                nodes = detect(f, state_var)
                 if nodes:
                     info = [
                         f,
